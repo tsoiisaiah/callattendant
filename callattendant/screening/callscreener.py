@@ -40,7 +40,7 @@ class CallScreener(object):
         number = callerid['NMBR']
         name = callerid["NAME"]
         permit = self.config.get_namespace("PERMIT_")
-        phoneLength = self.config["PHONE_DISPLAY_FORMAT"].count('#')
+        phoneLength = str(self.config["PHONE_DISPLAY_FORMAT"].count('#'))
         try:
             is_whitelisted, reason = self._whitelist.check_number(callerid['NMBR'])
             if is_whitelisted:
@@ -77,7 +77,7 @@ class CallScreener(object):
         number = callerid['NMBR']
         name = callerid["NAME"]
         block = self.config.get_namespace("BLOCK_")
-        phoneLength = self.config["PHONE_DISPLAY_FORMAT"].count('#')
+        phoneLength = str(self.config["PHONE_DISPLAY_FORMAT"].count('#'))
         try:
             is_blacklisted, reason = self._blacklist.check_number(number)
             if is_blacklisted:

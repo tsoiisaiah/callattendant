@@ -164,7 +164,7 @@ class Whitelist(object):
         return results
         
     def get_prefix(self, phoneLength):
-        query = "SELECT PhoneNo FROM Whitelist WHERE LENGTH(PhoneNo) <> ?"
-        args = (phoneLength)
+        query = "SELECT PhoneNo FROM Whitelist WHERE LENGTH(PhoneNo) <> :phoneLength"
+        args = {"phoneLength": phoneLength}
         results = query_db(self.db, query, args, False)
         return results
