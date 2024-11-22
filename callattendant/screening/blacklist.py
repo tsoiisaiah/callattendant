@@ -165,3 +165,9 @@ class Blacklist(object):
         args = (number,)
         results = query_db(self.db, query, args, False)
         return results
+        
+    def get_prefix(self, phoneLength):
+        query = "SELECT PhoneNo FROM Blacklist WHERE LENGTH(PhoneNo) <> ?"
+        args = (phoneLength)
+        results = query_db(self.db, query, args, False)
+        return results

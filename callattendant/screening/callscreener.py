@@ -40,11 +40,21 @@ class CallScreener(object):
         number = callerid['NMBR']
         name = callerid["NAME"]
         permit = self.config.get_namespace("PERMIT_")
+        phoneLength = self.config["PHONE_DISPLAY_FORMAT"].count('#')
         try:
             is_whitelisted, reason = self._whitelist.check_number(callerid['NMBR'])
             if is_whitelisted:
                 return True, reason
             else:
+                whitelistPrefixList = self._whitelist.get_prefix(phoneLength)
+                if (len(whitelistPrefixList) > 0):
+                    print(">> Checking pefix patterns...")
+                    for result in whitelistPrefixList:
+                        prefix = result[0]
+                        match = re.search(prefix, number)
+                        if match:
+                            print("Match prefix " + prefix)
+                            return True, reason
                 print(">> Checking permitted patterns...")
                 for key in permit["name_patterns"].keys():
                     match = re.search(key, name)
@@ -67,11 +77,21 @@ class CallScreener(object):
         number = callerid['NMBR']
         name = callerid["NAME"]
         block = self.config.get_namespace("BLOCK_")
+        phoneLength = self.config["PHONE_DISPLAY_FORMAT"].count('#')
         try:
             is_blacklisted, reason = self._blacklist.check_number(number)
             if is_blacklisted:
                 return True, reason
             else:
+                blacklistPrefixList = self._blacklist.get_prefix(phoneLength)
+                if (len(blacklistPrefixList) > 0):
+                    print(">> Checking pefix patterns...")
+                    for result in blacklistPrefixList:
+                        prefix = result[0]
+                        match = re.search(prefix, number)
+                        if match:
+                            print("Match prefix " + prefix)
+                            return True, reason
                 print(">> Checking blocked patterns...")
                 for key in block["name_patterns"].keys():
                     match = re.search(key, name)
